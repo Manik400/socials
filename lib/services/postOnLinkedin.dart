@@ -13,7 +13,7 @@ class LinkedinPost{
   final String accessToken ;
   final String userId ;
 
-  Future<void> createPost(String content , String title , XFile? image) async {
+  Future<void> createPost(String content , String title , List<XFile>? images) async {
 
     final url = 'https://api.linkedin.com/v2/ugcPosts';
     final headers = {
@@ -30,15 +30,15 @@ class LinkedinPost{
             'text': content,
           },
           'shareMediaCategory': 'NONE', // Add media attachments if required
-          'media' : [
-            {
-              'media': image != null
-                  ? 'https://example.com/images/${DateTime.now().millisecondsSinceEpoch}'
-                  : '',
-              'status': 'READY',
-              'originalUrl': image?.path ?? '',
-            }
-          ]
+          'media': images != null
+              ? images
+              .map((image) => {
+            'media': 'https://example.com/images/${DateTime.now().millisecondsSinceEpoch}',
+            'status': 'READY',
+            'originalUrl': image.path,
+          })
+              .toList()
+              : [],
         },
       },
       'visibility': {

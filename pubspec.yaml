@@ -48,6 +48,7 @@ dependencies:
   http:
   flutter_web_auth:
   flutter_appauth:
+  twitter_login: 
 
 dev_dependencies:
   flutter_test:

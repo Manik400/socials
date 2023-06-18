@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:socials/screens/LoadingScreen.dart';
 import 'package:socials/screens/home1.dart';
 import 'package:socials/services/signinlinkedin.dart';
+import 'package:socials/services/signintwitter.dart';
 import 'package:socials/utilities/Alerts.dart';
 import 'splash.dart';
 import 'login.dart';
@@ -59,13 +60,16 @@ class _signupscreenState extends State<signupscreen> {
 
       LinkedinSignIn linkedinSignIn = LinkedinSignIn();
 
+
       Map<String , dynamic>? ld =await linkedinSignIn.signInWithLinkedIn();
       setState(() {
         widget.LinkedinData =  ld;
       });
 
+      // TwitterSignIn twitterSignIn = TwitterSignIn() ;
       Navigator.pop(context);
       setState(() {
+        widget.LinkedinData = ld;
         isloading = true;
       });
 
@@ -80,7 +84,8 @@ class _signupscreenState extends State<signupscreen> {
     }
   }
 
-  void validinput() {
+  Future<void> validinput() async {
+
     String input = _textEditingController.text;
     String input1 = _textEditingController1.text;
     String input2 = _textEditingController2.text;

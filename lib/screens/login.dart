@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:socials/screens/LoadingScreen.dart';
+import 'package:socials/screens/post.dart';
 
 class loginscreen extends StatefulWidget {
   static const String id = 'login_screen';

@@ -861,7 +861,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     getcontactdata();
   }
 
-  void getcontactdata() async {
+   Future<void> getcontactdata() async {
     ContactP contactP = ContactP();
     await contactP.getPermissoin();
     List<Contact> contact1 = await contactP.contacts;

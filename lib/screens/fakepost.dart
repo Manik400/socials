@@ -2,15 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:socials/screens/signUp.dart';
-import 'package:socials/services/postOnLinkedin.dart';
-import 'package:socials/services/postOnTwitter.dart';
 import 'package:socials/utilities/textfield.dart';
 import 'package:socials/utilities/buttons.dart';
 import 'package:socials/utilities/colors.dart';
-// import 'package:image_picker_for_web/image_picker_for_web.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:socials/services/signinlinkedin.dart';
 
 class PostScreen extends StatefulWidget {
   static const String id = 'post_screen';
@@ -33,7 +28,9 @@ class _PostScreenState extends State<PostScreen> {
   List<XFile>? img;
   XFile? Selectedimage;
   String imagename = "";
+
   final ImagePicker picker = ImagePicker();
+
   Future<void> getimage(BuildContext context) async {
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
 
@@ -49,41 +46,21 @@ class _PostScreenState extends State<PostScreen> {
           imagename = imagename.substring(
               0, (MediaQuery.of(context).size.width * 0.2).toInt());
         }
-        imageUrls.add(Selectedimage!.path);
+        imageUrls.add(image.path);
       }
     });
   }
 
-  Map<String , dynamic>? lld ;
-  late String accessToken ;
-  late String userId ;
-  //
+  TextEditingController _textEditingController = TextEditingController();
+
   late String content;
   late String title;
-  
-  TextEditingController _textEditingController = TextEditingController();
-  // TextEditingController _textEditingController1 = TextEditingController();
-  late LinkedinPost linkedinPost;
-  late TwitterPost twitterPost;
-  Future<void> getID(BuildContext context) async {
-    LinkedinSignIn linkedinSignIn = LinkedinSignIn();
 
-    lld =await linkedinSignIn.signInWithLinkedIn();
-    setState(() {
-      accessToken = lld!['accessToken'];
-      userId = lld!['userId'];
-    });
-    linkedinPost = LinkedinPost(accessToken , userId);
-  }
-
-
-  
   @override
   void initState() {
     // TODO: implement initState
-    imageUrls.clear();
-    // lld = signupscreen().LinkedinData;
-    getID(context);
+    // imageUrls.clear();
+    // getID(context);
     // super.initState();
   }
 
@@ -151,7 +128,7 @@ class _PostScreenState extends State<PostScreen> {
                             keyboardType: TextInputType.multiline,
                             maxLines: null,
                             style: const TextStyle(
-                                fontSize: 14, color: Colors.white),
+                                fontSize: 14, color: Colors.black),
                             decoration: InputDecoration(
                                 hoverColor: Colors.white,
                                 filled: true,
@@ -174,31 +151,33 @@ class _PostScreenState extends State<PostScreen> {
                           height: 10,
                         ),
                         if (imageUrls.isNotEmpty)
-                          CarouselSlider(
-                            options: CarouselOptions(
-                              aspectRatio: 16 / 9,
-                              enlargeCenterPage: true,
-                              enableInfiniteScroll: false,
-                              initialPage: 0,
-                              viewportFraction: 0.9,
+                          Stack(children: [
+                            CarouselSlider(
+                              options: CarouselOptions(
+                                aspectRatio: 15 / 4,
+                                enlargeCenterPage: true,
+                                enableInfiniteScroll: false,
+                                initialPage: 0,
+                                viewportFraction: 0.9,
+                              ),
+                              items: imageUrls.map((imageUrl) {
+                                return Builder(
+                                  builder: (BuildContext context) {
+                                    print(imageUrl);
+                                    return Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 5.0),
+                                      child: Image.file(
+                                        File(imageUrl),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    );
+                                  },
+                                );
+                              }).toList(),
                             ),
-                            items: imageUrls.map((imageUrl) {
-                              return Builder(
-                                builder: (BuildContext context) {
-                                  print(imageUrl);
-                                  return Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    margin:
-                                        EdgeInsets.symmetric(horizontal: 5.0),
-                                    child: Image.file(
-                                      File(imageUrl),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  );
-                                },
-                              );
-                            }).toList(),
-                          ),
+                          ]),
                         if (imageUrls.isEmpty) Text('No images selected.'),
                         SizedBox(
                           height: 10,
@@ -239,18 +218,16 @@ class _PostScreenState extends State<PostScreen> {
                       child: Align(
                         alignment: Alignment.center,
                         child: primaryButton(
-                          MediaQuery.of(context).size.width / 2.4,
-                          title: "Publish",
-                          onPressed: ()async{
-                            setState(() {
-                              content = postcontroller.text;
-                              title = _textEditingController.text;
-                            });
-                            await linkedinPost.createPost(content , title , img);
-                            await twitterPost.postOnTwitter(content, img);
-                            Navigator.pop(context);
-                          }
-                        ),
+                            MediaQuery.of(context).size.width / 2.4,
+                            title: "Publish", onPressed: () async {
+                          // setState(() {
+                          //   content = postcontroller.text;
+                          //   title = _textEditingController.text;
+                          // });
+                          // await linkedinPost.createPost(content , title , img);
+                          // await twitterPost.postOnTwitter(content, img);
+                          // Navigator.pop(context);
+                        }),
                       ),
                     )
                   ],

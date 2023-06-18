@@ -9,7 +9,7 @@ import 'screens/signUp.dart';
 import 'screens/login.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'screens/LoadingScreen.dart';
-import 'screens/post.dart';
+import 'screens/fakepost.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart' show PlatformException, MethodChannel;
 import 'package:flutter/widgets.dart';
@@ -49,7 +49,7 @@ class _MyAppState extends State<MyApp> {
     List<Contact>conact=[];
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: splashscreen(),
+      home:signupscreen(),
       routes: {
         LoadingScreen.id: (context) => LoadingScreen(),
         signupscreen.id: (context) => signupscreen(),

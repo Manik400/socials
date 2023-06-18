@@ -7,51 +7,24 @@ import 'package:flutter_web_auth/flutter_web_auth.dart';
 
 
 class LinkedinSignIn{
-  final FlutterAppAuth _appAuth = FlutterAppAuth();
+
 
 
   Future<Map<String,dynamic>?> signInWithLinkedIn() async {
     try {
       const String redirectUrl = 'https://www.linkedin.com/developers/tools/oauth/redirect';
-      const String clientId = '77vxqldgssnss7';
-      const String clientSecret = 'M5dcJ1ohCFZCOg8C';
+      const String clientId = '77qkg176ijlicy';
+      const String clientSecret = 'BRPSbkhsIS21NWEj';
 
-      // final AuthorizationTokenResponse? result = await _appAuth.authorizeAndExchangeCode(
-      //   AuthorizationTokenRequest(
-      //     clientId,
-      //     redirectUrl,
-      //     serviceConfiguration: const AuthorizationServiceConfiguration(authorizationEndpoint: 'https://www.linkedin.com/oauth/v2/authorization', tokenEndpoint: 'https://www.linkedin.com/oauth/v2/accessToken'),
-      //     scopes: <String>['r_liteprofile', 'r_emailaddress', 'w_member_social'],
-      //   )
-      // );
-      // if (result != null && result.authorizationAdditionalParameters != null){
-      //   final authorizationCode = result.authorizationAdditionalParameters?['code'];
-      //   final TokenResponse? accessTokenResponse = await _appAuth.token(TokenRequest(
-      //     clientId,
-      //     redirectUrl,
-      //     authorizationCode:authorizationCode,
-      //     serviceConfiguration: const AuthorizationServiceConfiguration(
-      //       authorizationEndpoint: 'https://www.linkedin.com/oauth/v2/authorization',
-      //       tokenEndpoint: 'https://www.linkedin.com/oauth/v2/accessToken',
-      //     ),
-      //   ));
-      //
-      //   final accessToken = accessTokenResponse!.accessToken;
-      //   final expiresIn = accessTokenResponse.tokenAdditionalParameters?['expires_in'];
-      //   final userId = await _getLinkedInUserId(accessToken!);
-      //
-      //   Map<String ,dynamic> LinkData=  {
-      //     'accessToken': accessToken,
-      //     'expiresIn': expiresIn,
-      //     'userId': userId,
-      //   };
-      //   return LinkData;
-      // }
-      // return{};
+
 
 
       final authorizationUrl =
-          'https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=$clientId&redirect_uri=$redirectUrl&state=STATE&scope=r_liteprofile%20w_member_social'; // Replace YOUR_CLIENT_ID and redirectUri with your values
+          'https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=77qkg176ijlicy&redirect_uri=https://www.linkedin.com/developers/tools/oauth/redirect&state=STATE&scope=r_liteprofile%20w_member_social'; // Replace YOUR_CLIENT_ID and redirectUri with your values
+
+      // final result1 = await http.get(Uri.parse(authorizationUrl));
+      // final responseData1 = json.decode(result1.body);
+      // final authorizationCode = responseData1['code'];
 
       final result = await FlutterWebAuth.authenticate(
         url: authorizationUrl,
@@ -59,7 +32,7 @@ class LinkedinSignIn{
       );
 
       final uri = Uri.parse(result);
-      final authorizationCode = uri.queryParameters['code'];
+      final authorizationCode = jsonEncode(uri.queryParameters['code']);
       final tokenUrl = 'https://www.linkedin.com/oauth/v2/accessToken';
       final response = await http.post(
         Uri.parse(tokenUrl),
@@ -120,3 +93,38 @@ class LinkedinSignIn{
     }
   }
 }
+
+// final FlutterAppAuth _appAuth = FlutterAppAuth();
+
+// final AuthorizationTokenResponse? result = await _appAuth.authorizeAndExchangeCode(
+//   AuthorizationTokenRequest(
+//     clientId,
+//     redirectUrl,
+//     serviceConfiguration: const AuthorizationServiceConfiguration(authorizationEndpoint: 'https://www.linkedin.com/oauth/v2/authorization', tokenEndpoint: 'https://www.linkedin.com/oauth/v2/accessToken'),
+//     scopes: <String>['r_liteprofile', 'r_emailaddress', 'w_member_social'],
+//   )
+// );
+// if (result != null && result.authorizationAdditionalParameters != null){
+//   final authorizationCode = result.authorizationAdditionalParameters?['code'];
+//   final TokenResponse? accessTokenResponse = await _appAuth.token(TokenRequest(
+//     clientId,
+//     redirectUrl,
+//     authorizationCode:authorizationCode,
+//     serviceConfiguration: const AuthorizationServiceConfiguration(
+//       authorizationEndpoint: 'https://www.linkedin.com/oauth/v2/authorization',
+//       tokenEndpoint: 'https://www.linkedin.com/oauth/v2/accessToken',
+//     ),
+//   ));
+//
+//   final accessToken = accessTokenResponse!.accessToken;
+//   final expiresIn = accessTokenResponse.tokenAdditionalParameters?['expires_in'];
+//   final userId = await _getLinkedInUserId(accessToken!);
+//
+//   Map<String ,dynamic> LinkData=  {
+//     'accessToken': accessToken,
+//     'expiresIn': expiresIn,
+//     'userId': userId,
+//   };
+//   return LinkData;
+// }
+// return{};
